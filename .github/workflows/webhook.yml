@@ -1,0 +1,13 @@
+name: Triggered Action
+
+on:
+  repository_dispatch:
+    types: [reminder_triggered]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Print Reminder
+      run: echo "Reminder triggered from Chrome Tab Reminder!"
+
