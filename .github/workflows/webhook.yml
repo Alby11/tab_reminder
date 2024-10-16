@@ -11,7 +11,8 @@ jobs:
       - name: Send Pushover Notification
         run: |
           curl -s \
-            --form-string "token={{ secret.PUSHOVER_APP_TOKEN }}"\
-            --form-string "user={{ secret.PUSHOVER_USER_KEY }}" \
+            --form-string "token=${{ secrets.PUSHOVER_APP_TOKEN }}" \
+            --form-string "user=${{ secrets.PUSHOVER_USER_KEY }}" \
             --form-string "message=GitHub Action Triggered!" \
             https://api.pushover.net/1/messages.json
+
