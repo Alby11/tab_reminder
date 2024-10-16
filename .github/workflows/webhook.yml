@@ -1,5 +1,6 @@
 name: Triggered Action
 
+# The workflow will be triggered when a repository_dispatch event with the type "reminder_triggered" occurs
 on:
   repository_dispatch:
     types: [reminder_triggered]
@@ -7,26 +8,30 @@ on:
 jobs:
   send_notification:
     runs-on: ubuntu-latest
+
+    # Define steps in this job
     steps:
       - name: Extract Information from Payload
-        id: extract
+        id: extract  # Assign an ID to this step so that its outputs can be referenced later
         run: |
+          # Print the title and URL received from the GitHub event
           echo "Title: ${{ github.event.client_payload.title }}"
           echo "URL: ${{ github.event.client_payload.url }}"
+          
+          # Store the title and URL as environment variables for further use
           title="${{ github.event.client_payload.title }}"
           url="${{ github.event.client_payload.url }}"
-          
-          # Store title and URL for further use
+
+          # Set output variables for use in subsequent steps
           echo "::set-output name=title::$title"
           echo "::set-output name=url::$url"
 
+      # Step to send the Pushover notification
       - name: Send Pushover Notification
         run: |
+          # Use curl to send a POST request to the Pushover API with the message details
           curl -s \
             --form-string "token=${{ secrets.PUSHOVER_APP_TOKEN }}" \
             --form-string "user=${{ secrets.PUSHOVER_USER_KEY }}" \
-            --form-string "message=
-                Title: ${{ steps.extract.outputs.title }}
-
-                URL: ${{ steps.extract.outputs.url }}" \
-              https://api.pushover.net/1/messages.json
+            --form-string "message=Title: ${{ steps.extract.outputs.title }}%0AURL: ${{ steps.extract.outputs.url }}" \
+            https://api.pushover.net/1/messages.json
