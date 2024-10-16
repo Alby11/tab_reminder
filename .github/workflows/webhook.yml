@@ -8,11 +8,17 @@ jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Pushover Notification
+      - name: Extract Tab Info and Send Pushover Notification
         run: |
+          echo "Event Payload: ${{ github.event.client_payload }}"
+          tab_url=$(echo '${{ github.event.client_payload }}' | jq -r '.url')
+          tab_title=$(echo '${{ github.event.client_payload }}' | jq -r '.title')
+          message="Tab Reminder Triggered!\n\nTitle: ${tab_title}\nURL: ${tab_url}"
+          
           curl -s \
             --form-string "token=${{ secrets.PUSHOVER_APP_TOKEN }}" \
             --form-string "user=${{ secrets.PUSHOVER_USER_KEY }}" \
-            --form-string "message=GitHub Action Triggered!" \
+            --form-string "message=${message}" \
             https://api.pushover.net/1/messages.json
+
 
