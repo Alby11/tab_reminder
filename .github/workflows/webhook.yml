@@ -8,6 +8,10 @@ jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-    - name: Print Reminder
-      run: echo "Reminder triggered from Chrome Tab Reminder!"
-
+      - name: Send Pushover Notification
+        run: |
+          curl -s \
+            --form-string "token=$PUSHOVER_APP_TOKEN" \
+            --form-string "user=$PUSHOVER_USER_KEY" \
+            --form-string "message=GitHub Action Triggered!" \
+            https://api.pushover.net/1/messages.json
