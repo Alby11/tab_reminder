@@ -33,5 +33,8 @@ jobs:
           curl -s \
             --form-string "token=${{ secrets.PUSHOVER_APP_TOKEN }}" \
             --form-string "user=${{ secrets.PUSHOVER_USER_KEY }}" \
-            --form-string "message=Title: ${{ steps.extract.outputs.title }}%0AURL: ${{ steps.extract.outputs.url }}" \
+            --form-string "message=
+              Title: ${{ steps.extract.outputs.title }}
+
+              URL: ${{ steps.extract.outputs.url }}" \
             https://api.pushover.net/1/messages.json
