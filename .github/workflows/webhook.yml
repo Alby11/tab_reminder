@@ -13,7 +13,7 @@ jobs:
         run: |
           echo "Title: ${{ github.event.client_payload.title }}"
           echo "URL: ${{ github.event.client_payload.url }}"
-          title=$(printf "%s\n" "${{ github.event.client_payload.title }}")
+          title="${{ github.event.client_payload.title }}"
           url="${{ github.event.client_payload.url }}"
           
           # Store title and URL for further use
